@@ -1,0 +1,163 @@
+/* MAIN BOX */
+.main-box{
+    width: 70%;
+    margin: 60px auto 0;
+    height: 80vh;
+    display: flex;
+    justify-content: space-around;
+
+    /*border: 1px solid black;*/
+}
+
+/* IMAGES BOX */
+.images-box{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    /*border: 1px solid black;*/
+}
+
+.main-image{
+    height: 90%;
+    width: 100%;
+}
+
+.small-images-box{
+    width: 100%;
+    height: 10%;
+    display: flex;
+}
+
+.small-image{
+    height: 100%;
+    width: 12.5%;
+    border: 1px solid lightgray;
+}
+
+.small-image img{
+    height: 100%;
+    width: 100%;
+}
+
+/* DETAILS BOX */
+.details-box{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    /*border: 1px solid black;*/
+}
+
+/* PRODUCT DETAILS BOX */
+.product-details-box{
+    width: 100%;
+    height: 50%;
+    background-color: #F4C2C2;
+    padding: 10px;
+    box-shadow: -20px 30px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+
+    /*border: 1px solid black;*/
+}
+
+.product-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    height: 5%;
+}
+
+.product-details{
+    font-size: 18px;
+    line-height: 1.25;
+}
+
+.product-state,
+.product-price,
+.delivery-details,
+.delivery-location{
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.date{
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* SELLER DETAILS BOX */
+
+.seller-details-box{
+    width: 100%;
+    height: 30%;
+    background-color: #F4C2C2;
+    padding: 10px;
+    box-shadow: -20px 30px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.seller-names-box{
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.seller-names{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: -10px;
+}
+
+.seller-rating-box{
+    display: flex;
+    flex-direction: row;
+    padding-left: 20px;
+    margin-bottom: -30px;
+    margin-top: 10px;
+}
+
+.star{
+    color: #FFDF00;
+}
+
+.seller-rating-box a{
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.seller-rating-box a:hover{
+    text-decoration: underline;
+}
+
+.contact-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    margin-top: 40px;
+    margin-bottom: -30px;
+}
+
+.seller-email,
+.seller-phone{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
