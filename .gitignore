@@ -64,3 +64,30 @@ npm-debug.log*
 # User-specific files
 .DS_Store
 Thumbs.db
+
+# Dependency directories
+/node_modules
+
+# Built files
+/build
+/dist
+
+# Environment files
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode
+.idea
+*.suo
+*.ntvs_analysis.dat
+*.njsproj
+*.sln
+*.sw?
