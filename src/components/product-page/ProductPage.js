@@ -1,106 +1,166 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from '../../api/axiosConfig'
 import './ProductPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as solidStar, faStarHalfAlt as SolidHalfStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regulerStar} from '@fortawesome/free-regular-svg-icons';
+
+import { Swiper, SwiperSlide} from 'swiper/react';
+import { Navigation, Pagination} from 'swiper/modules'
+import 'swiper/css';
+//import 'swiper/css/navigation'
+//import 'swiper/css/pagination'
 
 const ProductDetails = () => {
+
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
+    const [photos, setPhotos] = useState([]);
+    const [comments, setComments] = useState([]);
+    const [averageRating, setAverageRating] = useState(null);
+
+    useEffect(() => {
+        axios.get(`/api/v1/products/${id}`)
+            .then((productResponse) => {
+                const productData = productResponse.data;
+                setProduct(productData);
+            })
+            .catch((error) => {
+                console.error('Error fetching product:', error);
+            });
+
+        axios.get(`/api/v1/productPhotos/product/${id}`)
+            .then((photosResponse) => {
+                const photosData = photosResponse.data;
+                setPhotos(photosData);
+            })
+            .catch((error) => {
+                console.error('Error fetching photos:', error);
+            });
+    }, [id]);
+
+    useEffect(() => {
+        if (product && product.seller) {
+            axios.get(`/api/v1/comments/user/${product.seller.id}`)
+                .then((commentsResponse) => {
+                    const commentsData = commentsResponse.data;
+                    setComments(commentsData);
+                })
+                .catch((error) => {
+                    console.error('Error fetching comments:', error);
+                });
+        }        
+    }, [product]);
+
+    useEffect(() => {
+        if (comments.length > 0) {
+            const sumOfRatings = comments.reduce((total, comment) => total + comment.rating, 0);
+            const avgRating = sumOfRatings / comments.length;
+            setAverageRating(avgRating);
+        }
+        else{
+            setAverageRating(-1);
+        }
+    }, [comments]);
+
+    if (!product || photos.length === 0) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="main-box">
             <div className="images-box">
-                <img className="main-image"alt="Main Product" />
-                <div className="small-images-box">
-                    <div className="small-image">
-                        <img alt="Product Thumbnail" />
-                    </div>
-                </div>
+                <Swiper
+                    className="swiper"
+                    spaceBetween={50}
+                    slidesPerView={1}
+                    loop={true}
+                    navigation={{ clickable: true }}
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                    onSlideChange={() => console.log('slide change')}
+                    onSwiper={(swiper) => console.log(swiper)}
+                >
+                    <SwiperSlide className="swiper-slide" >
+                        <img className="main-image" src={`/images/${photos[0].path}`}></img>
+                    </SwiperSlide>
+                    <SwiperSlide className="swiper-slide">
+                        <img className="main-image" src={`/images/${photos[1].path}`}></img>
+                    </SwiperSlide>
+                    <SwiperSlide className="swiper-slide">
+                        <img className="main-image" src={`/images/${photos[2].path}`}></img>
+                    </SwiperSlide>
+                </Swiper>
             </div>
             <div className="details-box">
                 <div className="product-title">
-                    <p>Title</p>
+                    <p>{product.name}</p>
                 </div>
                 <div className="product-details-box">
-                    <p className="date">Posted on Date</p>
-                    <p className="product-details">Description</p>
+                    <p className="date">Posted on: {product.createdDate}</p>
+                    <p className="product-details">{product.description}</p>
                     <div className="product-state">
-                        <p>State: State</p>
+                        <p>State: {product.state.stateString}</p>
                     </div>
                     <div className="product-price">
-                        <p>Price: Price</p>
+                        <p>Price: {product.price}</p>
                     </div>
                     <div className="delivery-details">
-                        <p>
-                            <span>Buyer pays delivery</span>
-                        </p>
+                    <p>
+                        {product.buyerPayingDelivery
+                            ? <span>Buyer pays delivery</span>
+                            : <span>Seller pays delivery</span>
+                        }
+                    </p>
                     </div>
                     <div className="delivery-location">
-                        <p>Seller location: City, Country</p>
+                        <p>Seller location: {product.seller.city}, {product.seller.country}</p>
                     </div>
                 </div>
                 <div className="seller-details-box">
                     <div className="seller-names-box">
-                        <p className="seller-names">Seller Name</p>
-                        <p className="date">Active on SellBy since Date</p>
+                        <p className="seller-names">{product.seller.first_name} {product.seller.last_name}</p>
+                        <p className="date">Active on SellBy since {product.seller.createdDate}</p>
                     </div>
                     <div className="seller-rating-box">
-                        <p className="no-rating-text">
-                            The user doesn't have any comments yet
-                        </p>
-                    </div>
-                    <div className="seller-rating-box">
-                        <div className="star">
-                            <i className="fa fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="far fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star-half-alt fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="far fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star-half-alt fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="far fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star-half-alt fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="far fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star-half-alt fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="far fa-star fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star-half-alt fa-2xl"></i>
-                        </div>
-                        <div className="star">
-                            <i className="fas fa-star fa-2xl"></i>
-                        </div>
-                        <a href="#">Comments</a>
+                        {comments.length === 0 ? (
+                            <p className="no-rating-text">The user doesn't have any comments yet</p>
+                        ) : (
+                            <>
+                                <div className="star">
+                                    <FontAwesomeIcon icon={solidStar} size="3x" />
+                                </div>
+                                <div className="star">
+                                    {averageRating < 1.25 && <FontAwesomeIcon icon={regulerStar} size="3x" />}
+                                    {averageRating >= 1.25 && averageRating < 1.75 && <FontAwesomeIcon icon={SolidHalfStar} size="3x" />}
+                                    {averageRating >= 1.75 && <FontAwesomeIcon icon={solidStar} size="3x" />}
+                                </div>
+                                <div className="star">
+                                    {averageRating < 2.25 && <FontAwesomeIcon icon={regulerStar} size="3x" />}
+                                    {averageRating >= 2.25 && averageRating < 2.75 && <FontAwesomeIcon icon={SolidHalfStar} size="3x" />}
+                                    {averageRating >= 2.75 && <FontAwesomeIcon icon={solidStar} size="3x" />}
+                                </div>
+                                <div className="star">
+                                    {averageRating < 3.25 && <FontAwesomeIcon icon={regulerStar} size="3x" />}
+                                    {averageRating >= 3.25 && averageRating < 3.75 && <FontAwesomeIcon icon={SolidHalfStar} size="3x" />}
+                                    {averageRating >= 3.75 && <FontAwesomeIcon icon={solidStar} size="3x" />}
+                                </div>
+                                <div className="star">
+                                    {averageRating < 4.25 && <FontAwesomeIcon icon={regulerStar} size="3x" />}
+                                    {averageRating >= 4.25 && averageRating < 4.75 && <FontAwesomeIcon icon={SolidHalfStar} size="3x" />}
+                                    {averageRating >= 4.75 && <FontAwesomeIcon icon={solidStar} size="3x" />}
+                                </div>
+                                <a href="#">{comments.length} Comments</a>
+                            </>
+                        )}
                     </div>
                     <div className="contact-box">
                         <div className="seller-email">
-                            <p>Seller Email</p>
+                            <p>{product.seller.email}</p>
                         </div>
                         <div className="seller-phone">
-                            <p>Seller Phone</p>
+                            <p>{product.seller.number}</p>
                         </div>
                     </div>
                 </div>
