@@ -6,11 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar, faStarHalfAlt as SolidHalfStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regulerStar} from '@fortawesome/free-regular-svg-icons';
 
+import SwiperCore from "swiper";
 import { Swiper, SwiperSlide} from 'swiper/react';
 import { Navigation, Pagination} from 'swiper/modules'
 import 'swiper/css';
+import "swiper/css/navigation"
+import "swiper/css/pagination"
 //import 'swiper/css/navigation'
 //import 'swiper/css/pagination'
+
+SwiperCore.use([Navigation])
 
 const ProductDetails = () => {
 
@@ -78,19 +83,13 @@ const ProductDetails = () => {
                     loop={true}
                     navigation={{ clickable: true }}
                     pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                    onSlideChange={() => console.log('slide change')}
-                    onSwiper={(swiper) => console.log(swiper)}
+                    modules={[Pagination]}
                 >
-                    <SwiperSlide className="swiper-slide" >
-                        <img className="main-image" src={`/images/${photos[0].path}`}></img>
-                    </SwiperSlide>
-                    <SwiperSlide className="swiper-slide">
-                        <img className="main-image" src={`/images/${photos[1].path}`}></img>
-                    </SwiperSlide>
-                    <SwiperSlide className="swiper-slide">
-                        <img className="main-image" src={`/images/${photos[2].path}`}></img>
-                    </SwiperSlide>
+                    {photos.map(photo => (
+                        <SwiperSlide className="swiper-slide" key={photo.path}>
+                        <img className="image" src={`/images/${photo.path}`} alt="Error with the image" />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </div>
             <div className="details-box">

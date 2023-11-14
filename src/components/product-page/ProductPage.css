@@ -15,27 +15,11 @@
     margin-top: 20px;
 }
 
-.main-image{
-    height: 100%;
-    width: 100%;
+.image{
+    height: 700px;
+    width: 670px;
 }
 
-.small-images-box{
-    width: 100%;
-    height: 10%;
-    display: flex;
-}
-
-.small-image{
-    height: 100%;
-    width: 12.5%;
-    border: 1px solid lightgray;
-}
-
-.small-image img{
-    height: 100%;
-    width: 100%;
-}
 
 /* DETAILS BOX */
 .details-box{

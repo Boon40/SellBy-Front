@@ -33,7 +33,7 @@ const Homepage = () => {
   }, []);
 
   const topRowProducts = products.slice(0, 3);
-  const bottomRowProducts = products.slice(3);
+  const bottomRowProducts = products.slice(3, 6);
 
   return (
     <div className="homepage-box">
