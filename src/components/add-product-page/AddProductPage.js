@@ -21,18 +21,22 @@ const AddProductPage = () => {
     function onFileSelect(event){
         const files = event.target.files;
         if (files.length === 0) return;
+        
         for (let i = 0; i < files.length; i++){
             if (files[i].type.split('/')[0] !== 'image') continue;
-            if (!images.some((e) => e.name === files[i].name)){
-                setImages((prevImages) => [
-                    ...prevImages,
-                    {
-                        name: files[i].name,
-                        url: URL.createObjectURL(files[i]),
-                    },
-                ]);
-            }
-        }
+    
+            const formData = new FormData();
+            formData.append('image', files[i]);
+    
+            setImages((prevImages) => [
+                ...prevImages,
+                {
+                    name: files[i].name, //remove later
+                    url: URL.createObjectURL(files[i]), // You can use this URL to display the image
+                    data: formData,
+                },
+            ]);
+        };
     }
 
     function deleteImage(index){
@@ -58,11 +62,16 @@ const AddProductPage = () => {
         for (let i = 0; i < files.length; i++){
             if (files[i].type.split('/')[0] !== 'image') continue;
             if (!images.some((e) => e.name === files[i].name)){
+
+                const formData = new FormData();
+                formData.append('image', files[i]);
+
                 setImages((prevImages) => [
                     ...prevImages,
                     {
                         name: files[i].name,
                         url: URL.createObjectURL(files[i]),
+                        data: formData,
                     },
                 ]);
             }
@@ -93,9 +102,17 @@ const AddProductPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/products', formData);
-            
-            navigate(`/product/${response.data.id}`);
+            const productResponse = await axios.post('http://localhost:8080/api/v1/products', formData);
+            for (let image of images){
+                image.data.append('id', productResponse.data.id)
+                const photoResponse = await axios.post('http://localhost:8080/api/v1/productPhotos', image.data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Image uploaded (react): ', photoResponse.data);
+            }    
+            navigate(`/product/${productResponse.data.id}`);
         } catch (error) {
             console.error('Error creating product:', error);
         }
@@ -168,13 +185,13 @@ const AddProductPage = () => {
                         <div className="delivery-container">
                             <input name="buyerPayingDelivery" type="radio" value="true" checked={formData.buyerPayingDelivery === true} onChange={handleChange}/>
                             <div className="radio-button-title">
-                                <label for="buyerPaysDelivery">Buyer pays delivery</label>
+                                <label htmlFor="buyerPaysDelivery">Buyer pays delivery</label>
                             </div>
                         </div>
                         <div className="delivery-container">
                             <input name="buyerPayingDelivery" type="radio" value="false" checked={formData.buyerPayingDelivery === false} onChange={handleChange}/>
                             <div className="radio-button-title">
-                                <label for="sellerPaysDelivery">Seller pays delivery</label>
+                                <label htmlFor="sellerPaysDelivery">Seller pays delivery</label>
                             </div>
                         </div>
                     </div>
