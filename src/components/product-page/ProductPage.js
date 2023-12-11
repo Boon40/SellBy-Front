@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from '../../api/axiosConfig'
 import './ProductPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -98,24 +99,25 @@ const ProductDetails = () => {
                 </div>
                 <div className="product-details-box">
                     <p className="date">Posted on: {product.createdDate}</p>
+                    <p className="product-price">{product.price}$</p>
                     <p className="product-details">{product.description}</p>
-                    <div className="product-state">
-                        <p>State: {product.state.stateString}</p>
+                    <div className="container">
+                        <div className="product-state">
+                            <p>State: {product.state.stateString}</p>
+                        </div>
+                        <div className="delivery-details">
+                        <p>
+                            {product.buyerPayingDelivery
+                                ? <span>Buyer pays delivery</span>
+                                : <span>Seller pays delivery</span>
+                            }
+                        </p>
+                        </div>
+                        <div className="delivery-location">
+                            <p>Seller location: {product.seller.city}, {product.seller.country}</p>
+                        </div>
                     </div>
-                    <div className="product-price">
-                        <p>Price: {product.price}</p>
-                    </div>
-                    <div className="delivery-details">
-                    <p>
-                        {product.buyerPayingDelivery
-                            ? <span>Buyer pays delivery</span>
-                            : <span>Seller pays delivery</span>
-                        }
-                    </p>
-                    </div>
-                    <div className="delivery-location">
-                        <p>Seller location: {product.seller.city}, {product.seller.country}</p>
-                    </div>
+                    
                 </div>
                 <div className="seller-details-box">
                     <div className="seller-names-box">
@@ -150,7 +152,7 @@ const ProductDetails = () => {
                                     {averageRating >= 4.25 && averageRating < 4.75 && <FontAwesomeIcon icon={SolidHalfStar} size="3x" />}
                                     {averageRating >= 4.75 && <FontAwesomeIcon icon={solidStar} size="3x" />}
                                 </div>
-                                <a href="#">{comments.length} Comments</a>
+                                <Link to={`/user/${product.seller.id}`}>{comments.length} Comments</Link>
                             </>
                         )}
                     </div>

@@ -14,35 +14,23 @@ const Header = () => {
             </a>
             <ul>
                 <li>
-                    <a href="#">
-                        <div className="nav-icon">
-                            <FontAwesomeIcon className="header-icon" icon={faMessage} size="2x" aria-hidden="true"/>
-                            <FontAwesomeIcon className="header-icon" icon={faMessage} size="2x" aria-hidden="true"/>
-                        </div>
+                    <a className="nav-text" href="/addProduct">
+                        Add product
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <div className="nav-icon">
-                            <FontAwesomeIcon className="header-icon" icon={faHeart} size="2x" aria-hidden="true"/>
-                            <FontAwesomeIcon className="header-icon" icon={faHeart} size="2x" aria-hidden="true"/>
-                        </div>
+                    <a className="nav-text" href="user/1">
+                        Profile
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <div className="nav-icon">
-                            <FontAwesomeIcon className="header-icon" icon={faCartShopping} size="2x" aria-hidden="true"/>
-                            <FontAwesomeIcon className="header-icon" icon={faCartShopping} size="2x" aria-hidden="true"/>
-                        </div>
+                    <a className="nav-text" href="/login">
+                        Login
                     </a>
                 </li>
                 <li>
-                    <a href="/login">
-                        <div className="nav-icon">
-                            <FontAwesomeIcon className="header-icon" icon={faUser} size="2x" aria-hidden="true"/>
-                            <FontAwesomeIcon className="header-icon" icon={faUser} size="2x" aria-hidden="true"/>
-                        </div>
+                    <a className="nav-text" href="/register">
+                        Register
                     </a>
                 </li>
             </ul>

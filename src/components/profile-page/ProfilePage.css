@@ -1,0 +1,185 @@
+.page-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+/* User details */
+
+.user-details-container{
+    width: 100%;
+    padding: 20px;
+    height: auto;
+    background-color: #F4C2C2;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.user-rating-container{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: -40px;
+    margin-left: 10px;
+
+}
+
+.details-and-comments-container{
+    width: 30%;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-date{
+    font-size: 12px;
+    font-style: italic;
+    margin-top: -15px;
+}
+
+.user-names{
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: -20px;
+}
+
+.user-names-box{
+    padding-left: 20px;
+}
+
+/* Comments */
+
+.add-comment-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    padding-top: 0;
+    background-color: #F4C2C2;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.comment-description-container textarea{
+    width: 100%;
+    height: 100px;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.comments-container{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.stars-container{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.comment-container{
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4C2C2;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.comment-about-user{
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.rating-and-date-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.comment-date{
+    margin-left: 20px;
+    font-style: italic;
+}
+
+.comment-radio{
+    display: none;
+}
+
+.add-comment-star{
+    color: #FFDF00;
+    cursor: pointer;
+}
+
+
+/* Listed products */
+
+.products-container{
+    width: 40%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.product-container{
+    margin-bottom: 20px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F4C2C2;
+    border-radius: 30px;
+}
+
+.product-image{
+    height: 170px;
+    width: 25%;
+    border: 1px solid black;
+}
+
+.product-details{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.date{
+    margin-top: -20px;
+}
+
+.price{
+    margin-top: 60px;
+}
+
+.link{
+    text-decoration: none;
+    color: black;
+}
+
+.listed-products-title{
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.add-comment-text,
+.title{
+    font-size: 22px;
+    font-weight: bold;
+}
