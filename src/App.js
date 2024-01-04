@@ -8,6 +8,7 @@ import RegisterPage from './components/register-page/RegisterPage';
 import Header from './components/header/Header';
 import AddProductPage from './components/add-product-page/AddProductPage';
 import ProfilePage from './components/profile-page/ProfilePage';
+import CategoryPage from './components/category-page/CategoryPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/register" element={<RegisterPage/>} />
           <Route path="/addProduct" element={<AddProductPage/>}></Route>
           <Route path="/user/:userId" element={<ProfilePage/>} />
+          <Route path="/products/category/:category" element={<CategoryPage/>} />
         </Routes>
 
       </BrowserRouter>

@@ -38,21 +38,21 @@ const Homepage = () => {
   return (
     <div className="homepage-box">
       <div className="homepage-categories-box">
-        <span><a href="#">Art</a></span>
-        <span><a href="#">Baby</a></span>
-        <span><a href="#">Books</a></span>
-        <span><a href="#">Business & Industrial</a></span>
-        <span><a href="#">Cameras & Photos</a></span>
-        <span><a href="#">Electronics</a></span>
-        <span><a href="#">Clothing, Shoes & Accessories</a></span>
-        <span><a href="#">Home & Garden</a></span>
-        <span><a href="#">Jewelry & Watches</a></span>
-        <span><a href="#">Music, Musical instruments & Gear</a></span>
-        <span><a href="#">Pet Supplies</a></span>
-        <span><a href="#">Sporting Goods</a></span>
-        <span><a href="#">Toys & Hobbies</a></span>
-        <span><a href="#">Travel</a></span>
-        <span><a href="#">Video Games & Consoles</a></span>
+        <span><a href="/products/category/Art">Art</a></span>
+        <span><a href="/products/category/Baby">Baby</a></span>
+        <span><a href="/products/category/Books">Books</a></span>
+        <span><a href="/products/category/BusinessAndIndustrial">Business & Industrial</a></span>
+        <span><a href="/products/category/CamerasAndPhotos">Cameras & Photos</a></span>
+        <span><a href="/products/category/Electronics">Electronics</a></span>
+        <span><a href="/products/category/ClothingShoesAndAccessories">Clothing, Shoes & Accessories</a></span>
+        <span><a href="/products/category/HomeAndGarden">Home & Garden</a></span>
+        <span><a href="/products/category/JewelryAndWatches">Jewelry & Watches</a></span>
+        <span><a href="/products/category/MusicMusicalInstrumentsAndGear">Music, Musical instruments & Gear</a></span>
+        <span><a href="/products/category/PetSupplies">Pet Supplies</a></span>
+        <span><a href="/products/category/SportingGoods">Sporting Goods</a></span>
+        <span><a href="/products/category/ToysAndHobbies">Toys & Hobbies</a></span>
+        <span><a href="/products/category/Travel">Travel</a></span>
+        <span><a href="/products/category/VideoGamesAndConsoles">Video Games & Consoles</a></span>
       </div>
       <div className="homepage-product-box">
         <div className="homepage-small-product-box">
