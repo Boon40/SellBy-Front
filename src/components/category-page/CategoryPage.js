@@ -40,7 +40,7 @@ const CategoryPage = () => {
                     <div key={product.id} className="homepage-product-card">
                     <Link to={`/product/${product.id}`}>
                     <i className="fa fa-heart cart" aria-hidden="true"></i>
-                    <img src={`/images/${product.photos[0].path}`} alt="Product Image" />
+                    <img src={`data:image/jpeg;base64,${product.photos[0]}`} alt="Product Image" />
                     <p className="homepage-product-title">{product.name}</p>
                     <p className="homepage-product-price">{product.price}$</p>
                     </Link>

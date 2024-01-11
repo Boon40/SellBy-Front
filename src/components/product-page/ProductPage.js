@@ -86,9 +86,13 @@ const ProductDetails = () => {
                     pagination={{ clickable: true }}
                     modules={[Pagination]}
                 >
-                    {photos.map(photo => (
-                        <SwiperSlide className="swiper-slide" key={photo.path}>
-                        <img className="image" src={`/images/${photo.path}`} alt="Error with the image" />
+                    {photos.map((photo, index) => (
+                        <SwiperSlide className="swiper-slide" key={index}>
+                            <img 
+                            className="image"
+                            src={`data:image/jpeg;base64,${photo}`}
+                            alt={`Product Image ${index + 1}`}
+                            />
                         </SwiperSlide>
                     ))}
                 </Swiper>
