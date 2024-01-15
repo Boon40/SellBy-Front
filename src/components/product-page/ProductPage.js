@@ -6,6 +6,8 @@ import './ProductPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar, faStarHalfAlt as SolidHalfStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regulerStar} from '@fortawesome/free-regular-svg-icons';
+import AuthService from '../../service/AuthService';
+import { jwtDecode } from 'jwt-decode';
 
 import SwiperCore from "swiper";
 import { Swiper, SwiperSlide} from 'swiper/react';
@@ -16,6 +18,7 @@ import "swiper/css/pagination"
 //import 'swiper/css/navigation'
 //import 'swiper/css/pagination'
 
+
 SwiperCore.use([Navigation])
 
 const ProductDetails = () => {
@@ -25,6 +28,31 @@ const ProductDetails = () => {
     const [photos, setPhotos] = useState([]);
     const [comments, setComments] = useState([]);
     const [averageRating, setAverageRating] = useState(null);
+
+    const [currentUser, setCurrentUser] = useState(undefined);
+    const [userDetails, setUserDetails] = useState([]);
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const user = AuthService.getCurrentUser();
+    
+            if (user) {
+                setCurrentUser((prevUser) => {
+                    if (prevUser !== user) {
+                        return user;
+                    }
+                    return prevUser;
+                });
+                console.log(user);
+                try {
+                    const response = await axios.get(`/api/v1/users/email/${jwtDecode(user.token).sub}`);
+                    setUserDetails(response.data);
+                } catch (error) {
+                    console.error('Error getting user: ', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, []);
 
     useEffect(() => {
         axios.get(`/api/v1/products/${id}`)
@@ -117,15 +145,23 @@ const ProductDetails = () => {
                             }
                         </p>
                         </div>
-                        <div className="delivery-location">
-                            <p>Seller location: {product.seller.city}, {product.seller.country}</p>
-                        </div>
+                        {currentUser ? (
+                            <div className="delivery-location">
+                                <p>Seller location: {product.seller.city}, {product.seller.country}</p>
+                            </div>
+                        ) : (
+                            <div className="delivery-location">
+                                <p>Seller location: Create an account to see</p>
+                            </div>
+                        )}
+                        
                     </div>
                     
                 </div>
-                <div className="seller-details-box">
+                {currentUser ? (
+                    <div className="seller-details-box">
                     <div className="seller-names-box">
-                        <p className="seller-names">{product.seller.first_name} {product.seller.last_name}</p>
+                        <a className="seller-names" href={`/user/${product.seller.id}`}> {product.seller.first_name} {product.seller.last_name}</a>
                         <p className="date">Active on SellBy since {product.seller.createdDate}</p>
                     </div>
                     <div className="seller-rating-box">
@@ -169,6 +205,12 @@ const ProductDetails = () => {
                         </div>
                     </div>
                 </div>
+                ) : (
+                    <div className="no-seller-details-box">
+                        <p>Login to see user details!</p>
+                    </div>
+                )}
+                
             </div>
         </div>
     );

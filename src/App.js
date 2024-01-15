@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import Homepage from './components/homepage/Homepage';
@@ -14,7 +13,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-
         <Header/>
         <Routes>
           <Route path="/" element={<Homepage/>} />
@@ -25,9 +23,7 @@ function App() {
           <Route path="/user/:userId" element={<ProfilePage/>} />
           <Route path="/products/category/:category" element={<CategoryPage/>} />
         </Routes>
-
-      </BrowserRouter>
-      
+      </BrowserRouter>      
     </div>
   );
 }

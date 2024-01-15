@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar, faStarHalfAlt as SolidHalfStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regulerStar} from '@fortawesome/free-regular-svg-icons';
-
+import AuthService from '../../service/AuthService';
+import { jwtDecode } from 'jwt-decode';
 
 
 const ProfilePage = () => {
@@ -15,17 +16,51 @@ const ProfilePage = () => {
     const [products, setProducts] = useState([]);
     const [comments, setComments] = useState([]);
     const [averageRating, setAverageRating] = useState(null);
-    const [user, setUser] = useState(null);
+    const [viewedUser, setViewedUser] = useState(null);
     const [rating, setRating] = useState(1);
     const [hover, setHover] = useState(null);
+    
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userDetails, setUserDetails] = useState([]);
+    
+    useEffect(() => {
+        const fetchUserData = async () => {
+          const user = AuthService.getCurrentUser();
+      
+          if (user) {
+            setCurrentUser((prevUser) => {
+              if (prevUser !== user) {
+                return user;
+              }
+              return prevUser;
+            });
+            try {
+              const currentResponse = await axios.get(`/api/v1/users/email/${jwtDecode(user.token).sub}`);
+              setUserDetails(currentResponse.data);
+      
+              // Set sellerId in formData directly
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                sellerId: currentResponse.data.id,
+              }));
+              console.log("current used")
+              console.log(currentResponse.data.id);
+            } catch (error) {
+              console.error('Error getting user: ', error);
+            }
+          }
+        };
+      
+        fetchUserData();
+      }, []);
     
 
     const getUser = async () =>{
         try{
-            console.log(userId);
             const response = await axios.get(`/api/v1/users/${userId}`);
-            console.log(response.data);
-            setUser(response.data);
+            setViewedUser(response.data);
+            console.log("user")
+            console.log(response.data.id);
         } catch (error){
             console.log(error);
         }
@@ -39,39 +74,48 @@ const ProfilePage = () => {
         rating: 1,
         description: '',
         receiverId: userId, 
-        senderId: 2  //TODO replace with current user's id
-    }, [user])
+        senderId: 2
+    });
 
     useEffect(() => {
-        if (user){
-            axios.get(`/api/v1/products/user/${user.id}`)
+        if (userDetails && userDetails.id && viewedUser) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                sellerId: userDetails.id
+            }));
+        }
+    }, [userDetails, viewedUser]);
+
+    useEffect(() => {
+        if (viewedUser) {
+          axios.get(`/api/v1/products/user/${viewedUser.id}`)
             .then((response) => {
-                const productData = response.data;
-                const productWithPhotosPromises = productData.map((product) => {
+              const productData = response.data;
+              const productWithPhotosPromises = productData.map((product) => {
                 return axios.get(`/api/v1/productPhotos/product/${product.id}`)
-                    .then((photoResponse) => {
+                  .then((photoResponse) => {
                     const productWithPhotos = {
-                        ...product,
-                        photos: photoResponse.data,
+                      ...product,
+                      photos: photoResponse.data,
                     };
                     return productWithPhotos;
-                    });
-                });
-        
-                Promise.all(productWithPhotosPromises)
+                  });
+              });
+      
+              Promise.all(productWithPhotosPromises)
                 .then((productsWithPhotos) => {
-                    setProducts(productsWithPhotos);
+                  setProducts(productsWithPhotos);
                 });
             })
             .catch((error) => {
-                console.error('Error fetching products:', error);
+              console.error('Error fetching products:', error);
             });
         }
-      }, [user]);
+      }, [viewedUser]);
 
       useEffect(() => {
-        if (user){
-            axios.get(`/api/v1/comments/user/${user.id}`)
+        if (viewedUser){
+            axios.get(`/api/v1/comments/user/${viewedUser.id}`)
                 .then((commentsResponse) => {
                     const commentsData = commentsResponse.data;
                     setComments(commentsData);
@@ -80,7 +124,7 @@ const ProfilePage = () => {
                     console.error('Error fetching comments:', error);
                 });
         }
-    }, [user]);
+    }, [viewedUser]);
 
     useEffect(() => {
         if (comments.length > 0) {
@@ -93,7 +137,7 @@ const ProfilePage = () => {
         }
     }, [comments]);
 
-    if (!user) {
+    if (!viewedUser || !userDetails) {
         return <div>Loading...</div>;
     }
 
@@ -101,6 +145,7 @@ const ProfilePage = () => {
         formData.rating = rating;
         try{
             const response = await axios.post(`/api/v1/comments`, formData);
+            window.location.reload();
         } catch (error){
             console.error('Error adding comment', error);
         }
@@ -111,8 +156,8 @@ const ProfilePage = () => {
             <div className="details-and-comments-container">
                 <div className="user-details-container">
                     <div className="user-names-box">
-                        <p className="user-names">{user.first_name} {user.last_name}</p>
-                        <p className="profile-date">Active on SellBy since {user.createdDate}</p>
+                        <p className="user-names">{viewedUser.first_name} {viewedUser.last_name}</p>
+                        <p className="profile-date">Active on SellBy since {viewedUser.createdDate}</p>
                     </div>
                     <div className="user-rating-container">
                         {comments.length === 0 ? (
@@ -147,16 +192,17 @@ const ProfilePage = () => {
                     </div>
                     <div className="contact-box">
                         <div className="seller-email">
-                            <p>{user.email}</p>
+                            <p>{viewedUser.email}</p>
                         </div>
                         <div className="seller-phone">
-                            <p>{user.number}</p>
+                            <p>{viewedUser.number}</p>
                         </div>
                     </div>
                 </div>
-
-                <div className="add-comment-container">
-                    <p className="add-comment-text">Add comment about {user.first_name}</p>
+                
+                {userDetails.id !== viewedUser.id ?(
+                    <div className="add-comment-container">
+                    <p className="add-comment-text">Add comment about {viewedUser.first_name}</p>
                     <div className="comment-description-container">
                         <textarea name="description" type="text" placeholder="description" rows="4" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required/>
                     </div>
@@ -187,9 +233,13 @@ const ProfilePage = () => {
                     </div>
                     <button type="submit" className="submit-button" onClick={handleSubmit}>Submit comment</button>
                 </div>
+                ) : (
+                    <br></br>
+                )}
+                
 
                 <div className="comments-container">
-                    <p className="comment-about-user">{comments.length} comments about {user.first_name}:</p>
+                    <p className="comment-about-user">{comments.length} comments about {viewedUser.first_name}:</p>
                     {comments.map((comment) => (
                         <div className="comment-container">
                         <div className="rating-and-date-container">
@@ -232,12 +282,12 @@ const ProfilePage = () => {
             </div>
 
             <div className="products-container">
-                <p className="listed-products-title">{user.first_name}'s listed products</p>
+                <p className="listed-products-title">{viewedUser.first_name}'s listed products</p>
                 
                 {products.map((product) => (
                     <Link className="link" to={`/product/${product.id}`}>
                         <div key={product.id} className="product-container">
-                            <img src={`/images/${product.photos[0].path}`} className="product-image" alt="Product image" />
+                            <img src={`data:image/jpeg;base64,${product.photos[0]}`} className="product-image" alt="Product image" />
                             <div className="product-details">
                                 <p className="title">{product.name}</p>
                                 <p className="date">Posted on: {product.createdDate}</p>

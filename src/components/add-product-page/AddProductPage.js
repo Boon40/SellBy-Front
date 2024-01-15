@@ -1,18 +1,64 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from '../../api/axiosConfig';
 import './AddProductPage.css';
-
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
+import { jwtDecode } from 'jwt-decode';
+import AuthService from '../../service/AuthService';
+
 
 const AddProductPage = () => {
 
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userDetails, setUserDetails] = useState([]);
     const [images, setImages] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        price: '',
+        sellerId: 1,
+        stateId: 1,
+        categoryId: 1,
+        buyerPayingDelivery: true
+    });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const user = AuthService.getCurrentUser();
+    
+            if (user) {
+                setCurrentUser((prevUser) => {
+                    if (prevUser !== user) {
+                        return user;
+                    }
+                    return prevUser;
+                });
+    
+                try {
+                    const response = await axios.get(`/api/v1/users/email/${jwtDecode(user.token).sub}`);
+                    setUserDetails(response.data);
+                } catch (error) {
+                    console.error('Error getting user: ', error);
+                }
+            }
+        };
+    
+        fetchUserData();
+    }, []);
+
+    useEffect(() => {
+        if (userDetails && userDetails.id) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                sellerId: userDetails.id
+            }));
+        }
+    }, [userDetails]);
 
     function selectFiles(){
         fileInputRef.current.click();
@@ -77,16 +123,6 @@ const AddProductPage = () => {
             }
         }
     }
-
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        price: '',
-        sellerId: 1, //use current user id
-        stateId: 1,
-        categoryId: 1,
-        buyerPayingDelivery: true
-    });
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
