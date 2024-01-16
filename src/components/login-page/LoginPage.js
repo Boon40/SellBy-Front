@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import './LoginPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
-import { jwtDecode } from 'jwt-decode';
-import AuthService from '../../service/AuthService';
 
 const LoginPage = () => {
 
@@ -61,7 +59,7 @@ const LoginPage = () => {
             {error && <p className="login-error-message">{error}</p>}
             <button type="submit" className="login-page-btn">Login</button>
             <div className="login-page-register-link">
-                <p>Don't have an account? <a href="/register">Register</a></p>
+                <p>Do not have an account? <a href="/register">Register</a></p>
             </div>
         </form>
         </div>

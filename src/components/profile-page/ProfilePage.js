@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../../api/axiosConfig'
 import './ProfilePage.css';
@@ -47,6 +47,7 @@ const ProfilePage = () => {
               console.log(currentResponse.data.id);
             } catch (error) {
               console.error('Error getting user: ', error);
+              console.log(currentUser);
             }
           }
         };
@@ -144,7 +145,7 @@ const ProfilePage = () => {
     const handleSubmit = async () => {
         formData.rating = rating;
         try{
-            const response = await axios.post(`/api/v1/comments`, formData);
+            await axios.post(`/api/v1/comments`, formData);
             window.location.reload();
         } catch (error){
             console.error('Error adding comment', error);
@@ -161,7 +162,7 @@ const ProfilePage = () => {
                     </div>
                     <div className="user-rating-container">
                         {comments.length === 0 ? (
-                            <p className="no-rating-text">The user doesn't have any comments yet</p>
+                            <p className="no-rating-text">The user does not have any comments yet</p>
                         ) : (
                             <>
                                 <div className="star">
@@ -210,7 +211,7 @@ const ProfilePage = () => {
                     {[...Array(5)].map((star, index) => {
                         const currentRating = index + 1;
                         return(
-                            <label>
+                            <label key={index}>
                                 <input
                                     className="comment-radio"
                                     type="radio"
@@ -241,7 +242,7 @@ const ProfilePage = () => {
                 <div className="comments-container">
                     <p className="comment-about-user">{comments.length} comments about {viewedUser.first_name}:</p>
                     {comments.map((comment) => (
-                        <div className="comment-container">
+                        <div key={comment.id} className="comment-container">
                         <div className="rating-and-date-container">
 
                             <div className="star">
@@ -282,10 +283,10 @@ const ProfilePage = () => {
             </div>
 
             <div className="products-container">
-                <p className="listed-products-title">{viewedUser.first_name}'s listed products</p>
+                <p className="listed-products-title">{viewedUser.first_name} listed products</p>
                 
                 {products.map((product) => (
-                    <Link className="link" to={`/product/${product.id}`}>
+                    <Link key={product.id} className="link" to={`/product/${product.id}`}>
                         <div key={product.id} className="product-container">
                             <img src={`data:image/jpeg;base64,${product.photos[0]}`} className="product-image" alt="Product image" />
                             <div className="product-details">

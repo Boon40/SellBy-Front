@@ -38,12 +38,12 @@ const AddProductPage = () => {
                     }
                     return prevUser;
                 });
-    
                 try {
                     const response = await axios.get(`/api/v1/users/email/${jwtDecode(user.token).sub}`);
                     setUserDetails(response.data);
                 } catch (error) {
                     console.error('Error getting user: ', error);
+                    console.log(currentUser);
                 }
             }
         };
@@ -82,7 +82,7 @@ const AddProductPage = () => {
                     data: formData,
                 },
             ]);
-        };
+        }
     }
 
     function deleteImage(index){

@@ -1,11 +1,12 @@
 import './Header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faMessage, faHeart, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import AuthService from '../../service/AuthService';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
 import axios from '../../api/axiosConfig';
+import React from 'react';
 
 const Header = () => {
     const [currentUser, setCurrentUser] = useState(null);

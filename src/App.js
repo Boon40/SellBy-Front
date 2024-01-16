@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 import AddProductPage from './components/add-product-page/AddProductPage';
 import ProfilePage from './components/profile-page/ProfilePage';
 import CategoryPage from './components/category-page/CategoryPage';
+import React from 'react';
 
 function App() {
   return (

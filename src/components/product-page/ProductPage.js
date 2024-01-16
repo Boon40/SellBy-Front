@@ -48,6 +48,7 @@ const ProductDetails = () => {
                     setUserDetails(response.data);
                 } catch (error) {
                     console.error('Error getting user: ', error);
+                    console.log(userDetails.id);
                 }
             }
         };
@@ -166,7 +167,7 @@ const ProductDetails = () => {
                     </div>
                     <div className="seller-rating-box">
                         {comments.length === 0 ? (
-                            <p className="no-rating-text">The user doesn't have any comments yet</p>
+                            <p className="no-rating-text">The user does not have any comments yet</p>
                         ) : (
                             <>
                                 <div className="star">
