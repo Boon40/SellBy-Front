@@ -35,7 +35,7 @@ const ProfilePage = () => {
               return prevUser;
             });
             try {
-              const currentResponse = await axios.get(`/api/v1/users/email/${jwtDecode(user.token).sub}`);
+              const currentResponse = await axios.get(`http://localhost:8080/api/v1/users/email/${jwtDecode(user.token).sub}`);
               setUserDetails(currentResponse.data);
       
               // Set sellerId in formData directly
@@ -43,7 +43,7 @@ const ProfilePage = () => {
                 ...prevFormData,
                 sellerId: currentResponse.data.id,
               }));
-              console.log("current used")
+              console.log("current user")
               console.log(currentResponse.data.id);
             } catch (error) {
               console.error('Error getting user: ', error);
